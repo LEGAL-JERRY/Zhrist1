@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zhrist — Editorial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Great+Vibes&family=IM+Fell+English:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* REVERSED — light ink on dark paper */
+      --ink:    #f0ece5;
+      --paper:  #0d0d0b;
+      --mid:    #7a7570;
+      --rule:   #2c2a27;
+      --font-script:  'Great Vibes', cursive;
+      --font-serif:   'Cormorant Garamond', Georgia, serif;
+      --font-fell:    'IM Fell English', Georgia, serif;
+      --font-bask:    'Libre Baskerville', Georgia, serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-serif);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay — analogue darkroom texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      opacity: 0.65;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.1) brightness(0.88);
+    }
+
+    /* ─────────────────────────────────────────────
+       MASTHEAD
+    ───────────────────────────────────────────── */
+    .masthead {
+      padding: 3.5rem 2rem 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--ink);
+      position: relative;
+    }
+
+    .masthead__eyebrow {
+      font-family: var(--font-bask);
+      font-size: 0.6rem;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 1.2rem;
+    }
+
+    .masthead__title {
+      font-family: var(--font-script);
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 400;
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+
+    .masthead__subtitle {
+      font-family: var(--font-fell);
+      font-style: italic;
+      font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+      letter-spacing: 0.12em;
+      color: var(--mid);
+      margin-top: 1rem;
+    }
+
+    .masthead__meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .masthead__meta span {
+      font-family: var(--font-bask);
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ─────────────────────────────────────────────
+       OPENING STATEMENT
+    ───────────────────────────────────────────── */
+    .opening {
+      max-width: 680px;
+      margin: 5rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    .opening__pullquote {
+      font-family: var(--font-fell);
+      font-style: italic;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .opening__rule {
+      width: 40px;
+      height: 1px;
+      background: var(--ink);
+      margin: 1.8rem auto;
+    }
+
+    .opening__body {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--mid);
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION DIVIDER
+    ───────────────────────────────────────────── */
+    .section-divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 4rem 2rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-divider__line {
+      height: 1px;
+      background: var(--ink);
+    }
+
+    .section-divider__label {
+      text-align: center;
+    }
+
+    .section-divider__roman {
+      display: block;
+      font-family: var(--font-bask);
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.35rem;
+    }
+
+    .section-divider__title {
+      font-family: var(--font-script);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--ink);
+      display: block;
+      line-height: 1;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION WRAPPER
+    ───────────────────────────────────────────── */
+    .section {
+      padding: 2rem 0 6rem;
+    }
+
+    /* ─────────────────────────────────────────────
+       EDITORIAL LAYOUTS
+    ───────────────────────────────────────────── */
+
+    /* Layout A — Hero full-bleed image */
+    .layout-hero {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .layout-hero__frame {
+      width: 100%;
+      height: clamp(480px, 70vh, 760px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .layout-hero__caption {
+      margin-top: 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .layout-hero__phrase {
+      font-family: var(--font-fell);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.55rem);
+      max-width: 55ch;
+      line-height: 1.4;
+    }
+
+    .layout-hero__index {
+      font-family: var(--font-bask);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--mid);
+      flex-shrink: 0;
+      padding-left: 2rem;
+    }
+
+    /* Layout B — Two columns, offset heights */
+    .layout-duo {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .layout-duo--offset .duo-item:last-child {
+      margin-top: 6rem;
+    }
+
+    .duo-item__frame {
+      overflow: hidden;
+    }
+
+    .duo-item__frame--tall   { height: clamp(420px, 58vh, 680px); }
+    .duo-item__frame--medium { height: clamp(340px, 46vh, 560px); }
+    .duo-item__frame--short  { height: clamp(280px, 38vh, 440px); }
+
+    .duo-item__caption {
+      margin-top: 1.1rem;
+      padding-left: 0.1rem;
+    }
+
+    .duo-item__phrase {
+      font-family: var(--font-fell);
+      font-style: italic;
+      font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+      line-height: 1.45;
+    }
+
+    .duo-item__label {
+      margin-top: 0.5rem;
+      font-family: var(--font-bask);
+      font-size: 0.55rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* Layout C — Three columns, equal */
+    .layout-trio {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .layout-trio .trio-item:nth-child(2) { margin-top: 3.5rem; }
+    .layout-trio .trio-item:nth-child(3) { margin-top: 1.5rem; }
+
+    .trio-item__frame {
+      height: clamp(300px, 42vh, 520px);
+      overflow: hidden;
+    }
+
+    .trio-item__caption {
+      margin-top: 0.9rem;
+    }
+
+    .trio-item__phrase {
+      font-family: var(--font-fell);
+      font-style: italic;
+      font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+      line-height: 1.5;
+    }
+
+    .trio-item__label {
+      margin-top: 0.4rem;
+      font-family: var(--font-bask);
+      font-size: 0.52rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* Layout D — Wide + narrow side panel */
+    .layout-asymm {
+      max-width: 1100px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .layout-asymm--reverse { grid-template-columns: 1fr 2fr; }
+    .layout-asymm--reverse .asymm-main { order: 2; }
+    .layout-asymm--reverse .asymm-side { order: 1; }
+
+    .asymm-main__frame  { height: clamp(460px, 65vh, 720px); overflow: hidden; }
+    .asymm-side__frame  { height: clamp(320px, 44vh, 520px); overflow: hidden; }
+
+    .asymm-main__caption, .asymm-side__caption { margin-top: 1.1rem; }
+
+    .asymm-main__phrase {
+      font-family: var(--font-fell);
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      line-height: 1.45;
+    }
+
+    .asymm-side__phrase {
+      font-family: var(--font-fell);
+      font-style: italic;
+      font-size: clamp(0.88rem, 1.5vw, 1.08rem);
+      line-height: 1.5;
+    }
+
+    .asymm-label {
+      margin-top: 0.5rem;
+      font-family: var(--font-bask);
+      font-size: 0.54rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ─────────────────────────────────────────────
+       INTERSTITIAL PULL QUOTE
+    ───────────────────────────────────────────── */
+    .interstitial {
+      padding: 5rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      margin: 4rem 0;
+    }
+
+    .interstitial__text {
+      font-family: var(--font-script);
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.25;
+      max-width: 16ch;
+      margin: 0 auto;
+    }
+
+    .interstitial__attr {
+      margin-top: 1.5rem;
+      font-family: var(--font-bask);
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    /* ─────────────────────────────────────────────
+       COLOPHON / FOOTER
+    ───────────────────────────────────────────── */
+    .colophon {
+      border-top: 1px solid var(--ink);
+      padding: 3rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .colophon__brand {
+      font-family: var(--font-script);
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .colophon__info {
+      font-family: var(--font-bask);
+      font-size: 0.55rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-align: right;
+      line-height: 2;
+    }
+
+    /* ─────────────────────────────────────────────
+       UTILITY
+    ───────────────────────────────────────────── */
+    .section-note {
+      max-width: 520px;
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+      text-align: center;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--mid);
+      letter-spacing: 0.02em;
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .layout-duo,
+      .layout-trio,
+      .layout-asymm,
+      .layout-asymm--reverse {
+        grid-template-columns: 1fr;
+      }
+      .layout-duo--offset .duo-item:last-child { margin-top: 0; }
+      .layout-trio .trio-item:nth-child(2),
+      .layout-trio .trio-item:nth-child(3)     { margin-top: 0; }
+      .layout-asymm--reverse .asymm-main,
+      .layout-asymm--reverse .asymm-side       { order: unset; }
+      .layout-hero__caption                    { flex-direction: column; gap: 0.6rem; }
+      .masthead__meta                          { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .colophon                                { flex-direction: column; text-align: center; }
+      .colophon__info                          { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       MASTHEAD
+  ══════════════════════════════════════════ -->
+  <header class="masthead">
+    <p class="masthead__eyebrow">Heritage · Identity · Legacy &nbsp;—&nbsp; Federal University of Lafia</p>
+    <h1 class="masthead__title">Zhrist</h1>
+    <p class="masthead__subtitle">A Visual Chronicle of Tradition, Pride, and the Cloth That Carries Them</p>
+    <div class="masthead__meta">
+      <span>Volume XII &nbsp; No. 4</span>
+      <span>Annual Heritage Edition</span>
+      <span>Lafia, Nasarawa State</span>
+    </div>
+  </header>
+
+  <!-- Opening Statement -->
+  <div class="opening">
+    <p class="opening__pullquote">
+      "Before the photograph, there was the garment.
+      Before the garment, there was the promise."
+    </p>
+    <div class="opening__rule"></div>
+    <p class="opening__body">
+      These pages do not sell anything. They remember everything.
+      What follows is a meditation on cloth and character — on how
+      what we wear becomes an archive of who we are and where we
+      have come from.
+    </p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION I — CASUAL
+  ══════════════════════════════════════════ -->
+  <div class="section-divider">
+    <div class="section-divider__line"></div>
+    <div class="section-divider__label">
+      <span class="section-divider__roman">Part the First</span>
+      <span class="section-divider__title">Casual</span>
+    </div>
+    <div class="section-divider__line"></div>
+  </div>
+
+  <section class="section" aria-label="Casual Editorial">
+
+    <p class="section-note">
+      Between the formal and the forgotten, the casual uniform
+      carries a quiet dignity — a belonging that needs no occasion.
+    </p>
+
+    <!-- Casual — Hero  [image7] -->
+    <div class="layout-hero">
+      <div class="layout-hero__frame">
+        <img src="images/image7.jpg"
+             alt="Figure walking casually through an archway in school casual wear" />
+      </div>
+      <div class="layout-hero__caption">
+        <p class="layout-hero__phrase">
+          The corridor remembers every student who walked it —
+          and every garment they chose to face the day.
+        </p>
+        <span class="layout-hero__index">Fig. VII · The Corridor</span>
+      </div>
+    </div>
+
+    <!-- Casual — Duo Offset  [image8, image9] -->
+    <div class="layout-duo layout-duo--offset">
+      <div class="duo-item">
+        <div class="duo-item__frame duo-item__frame--tall">
+          <img src="images/image8.png"
+               alt="Model leaning against a wall in casual wear, relaxed but composed" />
+        </div>
+        <div class="duo-item__caption">
+          <p class="duo-item__phrase">
+            Ease is also a form of discipline —
+            the knowing of when to unbutton
+            without unravelling.
+          </p>
+          <p class="duo-item__label">Fig. VIII · The Wall at Noon</p>
+        </div>
+      </div>
+      <div class="duo-item">
+        <div class="duo-item__frame duo-item__frame--medium">
+          <img src="images/image9.png"
+               alt="Two models seated on a bench in casual heritage attire" />
+        </div>
+        <div class="duo-item__caption">
+          <p class="duo-item__phrase">
+            Worn by those who came before.
+            Worn by those who will come after.
+            This is not fashion. This is passage.
+          </p>
+          <p class="duo-item__label">Fig. IX · The Bench</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Casual — Asymm Reverse  [image10, image11] -->
+    <div class="layout-asymm layout-asymm--reverse">
+      <div class="asymm-main">
+        <div class="asymm-main__frame">
+          <img src="images/image10.png"
+               alt="Model by a window in casual school attire, light falling across face" />
+        </div>
+        <div class="asymm-main__caption">
+          <p class="asymm-main__phrase">
+            There is a particular light in late afternoon
+            that finds only those who belong here.
+          </p>
+          <p class="asymm-label">Fig. X · Late Afternoon, Quadrangle</p>
+        </div>
+      </div>
+      <div class="asymm-side">
+        <div class="asymm-side__frame">
+          <img src="images/image11.jpg"
+               alt="Model carrying a worn leather satchel, casual sweater, composed" />
+        </div>
+        <div class="asymm-side__caption">
+          <p class="asymm-side__phrase">
+            The satchel is heavy with more
+            than books. It carries ambition
+            that has been passed down.
+          </p>
+          <p class="asymm-label">Fig. XI · The Satchel</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Casual — Single centred tall  [image12] -->
+    <div class="layout-hero">
+      <div class="layout-hero__frame"
+           style="height: clamp(500px, 75vh, 860px); max-width: 640px; margin: 0 auto;">
+        <img src="images/image12.jpeg"
+             alt="Full-length portrait of model in casual heritage wear" />
+      </div>
+      <div class="layout-hero__caption"
+           style="max-width: 640px; margin: 1.4rem auto 0;">
+        <p class="layout-hero__phrase">
+          Identity does not require ceremony.
+          Some mornings, it simply pulls on its jersey
+          and walks out into the world.
+        </p>
+        <span class="layout-hero__index">Fig. XII · Identity, Undressed</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Interstitial II ── -->
+  <div class="interstitial">
+    <p class="interstitial__text">To dress is to decide who you are today.</p>
+    <p class="interstitial__attr">— On the Casual Uniform</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION II — TAILORED
+  ══════════════════════════════════════════ -->
+  <div class="section-divider">
+    <div class="section-divider__line"></div>
+    <div class="section-divider__label">
+      <span class="section-divider__roman">Part the Second</span>
+      <span class="section-divider__title">Tailored</span>
+    </div>
+    <div class="section-divider__line"></div>
+  </div>
+
+  <section class="section" aria-label="Tailored Editorial">
+
+    <p class="section-note">
+      The blazer does not make the student.
+      But the student, wearing it with conscience,
+      makes the blazer mean something.
+    </p>
+
+    <!-- Tailored — Hero  [image13] -->
+    <div class="layout-hero">
+      <div class="layout-hero__frame">
+        <img src="images/image13.jpg"
+             alt="Model in full tailored school uniform, standing in formal interior" />
+      </div>
+      <div class="layout-hero__caption">
+        <p class="layout-hero__phrase">
+          Pressed like a promise.
+          Worn like a vow. Passed down like a name.
+        </p>
+        <span class="layout-hero__index">Fig. XIII · The Investiture</span>
+      </div>
+    </div>
+
+    <!-- Tailored — Trio with stagger  [image14, image15, image16] -->
+    <div class="layout-trio">
+      <div class="trio-item">
+        <div class="trio-item__frame">
+          <img src="images/image14.png"
+               alt="Close detail of blazer lapel with heritage badge" />
+        </div>
+        <div class="trio-item__caption">
+          <p class="trio-item__phrase">
+            The lapel carries a century
+            of names who stood here first.
+          </p>
+          <p class="trio-item__label">Fig. XIV · The Badge</p>
+        </div>
+      </div>
+      <div class="trio-item">
+        <div class="trio-item__frame">
+          <img src="images/image15.jpg"
+               alt="Model in full tailored uniform standing at attention" />
+        </div>
+        <div class="trio-item__caption">
+          <p class="trio-item__phrase">
+            Discipline is the quiet grammar
+            of every seam and crease.
+          </p>
+          <p class="trio-item__label">Fig. XV · Attention</p>
+        </div>
+      </div>
+      <div class="trio-item">
+        <div class="trio-item__frame">
+          <img src="images/image16.jpg"
+               alt="Model ascending stone steps in tailored dress uniform" />
+        </div>
+        <div class="trio-item__caption">
+          <p class="trio-item__phrase">
+            Every step taken here
+            has been taken before.
+            The stairs remember.
+          </p>
+          <p class="trio-item__label">Fig. XVI · The Ascent</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tailored — Duo balanced  [image17, image18] -->
+    <div class="layout-duo">
+      <div class="duo-item">
+        <div class="duo-item__frame duo-item__frame--tall">
+          <img src="images/image17.png"
+               alt="Full length tailored silhouette in formal school dress" />
+        </div>
+        <div class="duo-item__caption">
+          <p class="duo-item__phrase">
+            The silhouette alone announces
+            a school. A lineage. A standard
+            that does not negotiate itself.
+          </p>
+          <p class="duo-item__label">Fig. XVII · The Silhouette</p>
+        </div>
+      </div>
+      <div class="duo-item">
+        <div class="duo-item__frame duo-item__frame--tall" style="margin-top: 4rem;">
+          <img src="images/image18.jpg"
+               alt="Model in formal uniform standing in a wood-panelled hall" />
+        </div>
+        <div class="duo-item__caption">
+          <p class="duo-item__phrase">
+            In the hall of those who came before,
+            the uniform is not a garment.
+            It is an argument for continuity.
+          </p>
+          <p class="duo-item__label">Fig. XVIII · The Great Hall</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Final Interstitial ── -->
+  <div class="interstitial" style="margin-top: 2rem;">
+    <p class="interstitial__text">
+      We do not merely wear these things.<br>
+      We become them.
+    </p>
+    <p class="interstitial__attr">— Zhrist, Federal University of Lafia</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       SECTION III — SPORT
+  ══════════════════════════════════════════ -->
+  <div class="section-divider">
+    <div class="section-divider__line"></div>
+    <div class="section-divider__label">
+      <span class="section-divider__roman">Part the Third</span>
+      <span class="section-divider__title">Sport</span>
+    </div>
+    <div class="section-divider__line"></div>
+  </div>
+
+  <section class="section" aria-label="Sport Editorial">
+
+    <p class="section-note">
+      The field remembers names long after the final whistle.
+      These are the garments that bore witness.
+    </p>
+
+    <!-- Sport — Hero  [image1] -->
+    <div class="layout-hero">
+      <div class="layout-hero__frame">
+        <img src="images/image1.png"
+             alt="A figure stands in athletic dress, poised at the edge of the field" />
+      </div>
+      <div class="layout-hero__caption">
+        <p class="layout-hero__phrase">
+          Where the earth keeps the shape of every footfall,
+          and the kit remembers the names stitched into it.
+        </p>
+        <span class="layout-hero__index">Fig. I · Field Study</span>
+      </div>
+    </div>
+
+    <!-- Sport — Asymmetric Pair  [image2, image3] -->
+    <div class="layout-asymm">
+      <div class="asymm-main">
+        <div class="asymm-main__frame">
+          <img src="images/image2.png"
+               alt="Model in sport wear in motion" />
+        </div>
+        <div class="asymm-main__caption">
+          <p class="asymm-main__phrase">
+            Not speed alone, but the discipline that
+            chose this colour, this crest, this morning.
+          </p>
+          <p class="asymm-label">Fig. II · The Morning Run</p>
+        </div>
+      </div>
+      <div class="asymm-side">
+        <div class="asymm-side__frame">
+          <img src="images/image3.png"
+               alt="Model standing tall in sport uniform, heritage badge visible" />
+        </div>
+        <div class="asymm-side__caption">
+          <p class="asymm-side__phrase">
+            The crest is not decorative.
+            It is a covenant worn over the heart.
+          </p>
+          <p class="asymm-label">Fig. III · The Crest</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sport — Trio  [image4, image5, image6] -->
+    <div class="layout-trio">
+      <div class="trio-item">
+        <div class="trio-item__frame">
+          <img src="images/image4.jpg"
+               alt="Model seated on grass in sport kit, looking into distance" />
+        </div>
+        <div class="trio-item__caption">
+          <p class="trio-item__phrase">
+            Even still, the kit speaks of endurance.
+          </p>
+          <p class="trio-item__label">Fig. IV · Interval</p>
+        </div>
+      </div>
+      <div class="trio-item">
+        <div class="trio-item__frame">
+          <img src="images/image5.jpg"
+               alt="Model mid-stride in sport uniform across open ground" />
+        </div>
+        <div class="trio-item__caption">
+          <p class="trio-item__phrase">
+            A stride carried by every generation
+            who once wore these same colours.
+          </p>
+          <p class="trio-item__label">Fig. V · Succession</p>
+        </div>
+      </div>
+      <div class="trio-item">
+        <div class="trio-item__frame">
+          <img src="images/image6.jpg"
+               alt="Profile of model in sport attire, strong and composed" />
+        </div>
+        <div class="trio-item__caption">
+          <p class="trio-item__phrase">
+            Character is not built at the finish line.
+            It is packed into the bag the night before.
+          </p>
+          <p class="trio-item__label">Fig. VI · Eve of the Match</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Interstitial I ── -->
+  <div class="interstitial">
+    <p class="interstitial__text">Sweat is only rain that came from within.</p>
+    <p class="interstitial__attr">— Heritage of the Playing Field</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       COLOPHON
+  ══════════════════════════════════════════ -->
+  <footer class="colophon">
+    <div class="colophon__brand">Zhrist</div>
+    <div class="colophon__info">
+      <p>Annual Heritage Edition · Vol. XII, No. 4</p>
+      <p>All imagery is editorial. No garments are for sale.</p>
+      <p>Federal University of Lafia &nbsp;·&nbsp; Lafia, Nasarawa State</p>
+    </div>
+  </footer>
+
+</body>
+</html>
